@@ -18,7 +18,12 @@ const PaymentComponent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/make-payment', paymentData);
+      const token = localStorage.getItem('token'); // Get token from localStorage
+      await axios.post('http://localhost:5000/api/payments/', paymentData, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       alert('Payment successful');
     } catch (error) {
       console.error('Error making payment', error);

@@ -7,7 +7,12 @@ const PaymentVerificationComponent = () => {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await axios.get('/api/verify-payment');
+        const token = localStorage.getItem('token'); // Get token from localStorage
+        const response = await axios.get('http://localhost:5000/api/payments/unverified', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
         setPayments(response.data);
       } catch (error) {
         console.error('Error fetching payments', error);
@@ -18,8 +23,14 @@ const PaymentVerificationComponent = () => {
 
   const handleVerify = async (paymentId) => {
     try {
-      await axios.post(`/api/verify-payment/${paymentId}`);
+      const token = localStorage.getItem('token'); // Get token from localStorage
+      await axios.post(`http://localhost:5000/api/payments/${paymentId}/verify`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       alert('Payment verified successfully');
+      setPayments(payments.filter((payment) => payment._id !== paymentId)); // Remove verified payment from list
     } catch (error) {
       console.error('Error verifying payment', error);
       alert('Verification failed');
@@ -33,11 +44,11 @@ const PaymentVerificationComponent = () => {
         <p>No pending payments</p>
       ) : (
         payments.map((payment) => (
-          <div key={payment.id}>
+          <div key={payment._id}>
             <p>Amount: {payment.amount}</p>
             <p>Currency: {payment.currency}</p>
             <p>Provider: {payment.provider}</p>
-            <button onClick={() => handleVerify(payment.id)}>Verify Payment</button>
+            <button onClick={() => handleVerify(payment._id)}>Verify Payment</button>
           </div>
         ))
       )}
