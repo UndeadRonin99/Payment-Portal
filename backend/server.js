@@ -10,10 +10,18 @@ const app = express();
 
 // Connect Database
 connectDB();
+const corsOptions = {
+    origin: process.env.NODE_ENV === 'production' 
+      ? ['https://localhost:5000'] 
+      : '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true
+  };
+  
 
 // Middleware
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Routes
