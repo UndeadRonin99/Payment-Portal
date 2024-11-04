@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const mongoSanitize = require('express-mongo-sanitize');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
@@ -23,6 +24,7 @@ const corsOptions = {
 app.use(helmet());
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(mongoSanitize());
 
 // Routes
 app.use('/api/auth', authRoutes);
