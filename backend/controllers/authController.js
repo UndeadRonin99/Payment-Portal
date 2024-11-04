@@ -2,6 +2,8 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const Joi = require('joi');
+const validator = require('validator');
+
 
 // Joi schema for input validation
 const registerSchema = Joi.object({
@@ -49,7 +51,8 @@ exports.login = async (req, res) => {
     const { accountNumber, password } = req.body;
 
     // Use explicit equality operator to prevent injection
-    const user = await User.findOne({ accountNumber: { $eq: accountNumber } });
+    const sanitizedAccountNumber = validator.escape(accountNumber.trim());
+    const user = await User.findOne({ accountNumber: sanitizedAccountNumber });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
