@@ -34,6 +34,7 @@ exports.register = async (req, res) => {
     const user = new User({ fullName, idNumber, accountNumber, password: hashedPassword, role });
 
     await user.save();
+
     res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -51,7 +52,7 @@ exports.login = async (req, res) => {
     const { accountNumber, password } = req.body;
 
     // Use explicit equality operator to prevent injection
-    const sanitizedAccountNumber = validator.escape(accountNumber.trim());
+    const sanitizedAccountNumber = accountNumber.trim();
     const user = await User.findOne({ accountNumber: sanitizedAccountNumber });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });

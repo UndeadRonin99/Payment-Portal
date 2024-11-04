@@ -1,36 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useCsrf } from '../CsrfContext'; // Import the useCsrf hook
 
-const PaymentVerificationComponent = () => {
+const VerifyPaymentsComponent = () => {
   const [payments, setPayments] = useState([]);
+  const csrfToken = useCsrf(); // Get CSRF token from context
 
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const token = localStorage.getItem('token'); // Get token from localStorage
-        const response = await axios.get('http://localhost:5000/api/payments/unverified', {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('https://localhost:443/api/payments/unverified', {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+            'X-CSRF-Token': csrfToken // Include CSRF token in the header
+          },
+          withCredentials: true, // Include cookies
         });
+        console.log('Payments fetched:', response.data); // Debug log to confirm data shape
         setPayments(response.data);
       } catch (error) {
         console.error('Error fetching payments', error);
       }
     };
+
     fetchPayments();
-  }, []);
+  }, [csrfToken]); // Add csrfToken as a dependency to ensure it's updated
 
   const handleVerify = async (paymentId) => {
     try {
-      const token = localStorage.getItem('token'); // Get token from localStorage
-      await axios.post(`http://localhost:5000/api/payments/${paymentId}/verify`, {}, {
+      const token = localStorage.getItem('token');
+      await axios.post(`https://localhost:443/api/payments/${paymentId}/verify`, null, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+          'X-CSRF-Token': csrfToken // Include CSRF token in the header
+        },
+        withCredentials: true, // Include cookies
       });
       alert('Payment verified successfully');
-      setPayments(payments.filter((payment) => payment._id !== paymentId)); // Remove verified payment from list
+
+      // Update state to reflect the verified payment has been removed
+      setPayments((prevPayments) => prevPayments.filter((payment) => payment._id !== paymentId));
     } catch (error) {
       console.error('Error verifying payment', error);
       alert('Verification failed');
@@ -56,4 +66,4 @@ const PaymentVerificationComponent = () => {
   );
 };
 
-export default PaymentVerificationComponent;
+export default VerifyPaymentsComponent;

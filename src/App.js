@@ -5,15 +5,30 @@ import PaymentComponent from './components/PaymentComponent';
 import PaymentVerificationComponent from './components/PaymentVerificationComponent';
 import NavigationPage from './components/NavigationPage';
 
+// Utility function to check if the user is authenticated
+const isAuthenticated = () => {
+  return localStorage.getItem('token') !== null;
+};
+
+// Wrapper component to protect routes
+const ProtectedRoute = ({ element }) => {
+  return isAuthenticated() ? element : <Navigate to="/login" />;
+};
+
 function App() {
   return (
     <Router>
       <Routes>
+        {/* Redirect root to login page */}
         <Route path="/" element={<Navigate to="/login" />} />
+
+        {/* Public routes */}
         <Route path="/login" element={<LoginComponent />} />
-        <Route path="/navigation" element={<NavigationPage />} />
-        <Route path="/payments" element={<PaymentComponent />} />
-        <Route path="/verify-payments" element={<PaymentVerificationComponent />} />
+
+        {/* Protected routes */}
+        <Route path="/navigation" element={<ProtectedRoute element={<NavigationPage />} />} />
+        <Route path="/payments" element={<ProtectedRoute element={<PaymentComponent />} />} />
+        <Route path="/verify-payments" element={<ProtectedRoute element={<PaymentVerificationComponent />} />} />
       </Routes>
     </Router>
   );

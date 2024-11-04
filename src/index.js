@@ -3,11 +3,15 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { CsrfProvider } from './CsrfContext'; // Import the CsrfProvider
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <CsrfProvider> {/* Wrap your entire app with CsrfProvider */}
+      <App />
+    </CsrfProvider>
   </React.StrictMode>
 );
 
