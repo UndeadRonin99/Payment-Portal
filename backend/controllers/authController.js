@@ -52,7 +52,7 @@ exports.login = async (req, res) => {
     const { accountNumber, password } = req.body;
 
     // Use explicit equality operator to prevent injection
-    const sanitizedAccountNumber = accountNumber.trim();
+    const sanitizedAccountNumber = validator.escape(accountNumber.trim());
     const user = await User.findOne({ accountNumber: sanitizedAccountNumber });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
