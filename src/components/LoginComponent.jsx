@@ -5,6 +5,7 @@ import { useCsrf } from '../CsrfContext'; // Import the useCsrf hook
 
 const LoginComponent = () => {
   const [formData, setFormData] = useState({
+    idNumber: '',
     accountNumber: '',
     password: ''
   });
@@ -45,6 +46,14 @@ const LoginComponent = () => {
     <form onSubmit={handleSubmit}>
       <input
         type="text"
+        name="idNumber"
+        placeholder="ID Number"
+        value={formData.idNumber}
+        onChange={handleChange}
+        required
+      />
+      <input
+        type="text"
         name="accountNumber"
         placeholder="Account Number"
         value={formData.accountNumber}
@@ -60,6 +69,7 @@ const LoginComponent = () => {
         required
       />
       <button type="submit">Login</button>
+      <button type="button" onClick={() => navigate('/register')}>Register</button>
     </form>
   );
 };

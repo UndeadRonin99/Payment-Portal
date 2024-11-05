@@ -27,6 +27,7 @@ const registerSchema = Joi.object({
 });
 
 const loginSchema = Joi.object({
+  idNumber: Joi.string().required(),
   accountNumber: Joi.string().required(),
   password: Joi.string().required()
 });
@@ -66,11 +67,17 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: error.details[0].message });
     }
 
-    const { accountNumber, password } = req.body;
+    const { idNumber, accountNumber, password } = req.body;
 
     // Use explicit equality operator to prevent injection
+    const sanitizedIdNumber = validator.escape(idNumber.trim());
     const sanitizedAccountNumber = validator.escape(accountNumber.trim());
-    const user = await User.findOne({ accountNumber: sanitizedAccountNumber });
+
+    // Find user with both accountNumber and idNumber
+    const user = await User.findOne({
+      accountNumber: sanitizedAccountNumber,
+      idNumber: sanitizedIdNumber
+    });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }

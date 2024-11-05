@@ -4,6 +4,7 @@ import LoginComponent from './components/LoginComponent';
 import PaymentComponent from './components/PaymentComponent';
 import PaymentVerificationComponent from './components/PaymentVerificationComponent';
 import NavigationPage from './components/NavigationPage';
+import RegisterComponent from './components/RegisterComponent';
 
 // Utility function to check if the user is authenticated
 const isAuthenticated = () => {
@@ -24,6 +25,7 @@ function App() {
 
         {/* Public routes */}
         <Route path="/login" element={<LoginComponent />} />
+        <Route path="/register" element={<RegisterComponent/>} />
 
         {/* Protected routes */}
         <Route path="/navigation" element={<ProtectedRoute element={<NavigationPage />} />} />
