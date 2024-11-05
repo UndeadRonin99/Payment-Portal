@@ -1,4 +1,6 @@
 # Payment Portal
+## Link to submission repo
+[Click here]([https://github.com/UndeadRonin99/Payment-Portal.git](https://github.com/VCSTDN2024/apds7311-poe-techtitans-apds.git))
 
 ## Overview
 The **Payment Portal** is a secure web application designed for managing user payments and verifications. This project allows users to register, log in, make payments, and verify them through a simple and user-friendly interface. The application is built with a **React** frontend and an **Express.js** backend, using **MongoDB** for database management.
