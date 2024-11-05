@@ -43,34 +43,57 @@ const LoginComponent = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="idNumber"
-        placeholder="ID Number"
-        value={formData.idNumber}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="accountNumber"
-        placeholder="Account Number"
-        value={formData.accountNumber}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={formData.password}
-        onChange={handleChange}
-        required
-      />
-      <button type="submit">Login</button>
-      <button type="button" onClick={() => navigate('/register')}>Register</button>
-    </form>
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-body">
+              <h3 className="card-title text-center">Login</h3>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="idNumber" className="form-label">ID Number</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="idNumber"
+                    placeholder="ID Number"
+                    value={formData.idNumber}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="accountNumber" className="form-label">Account Number</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="accountNumber"
+                    placeholder="Account Number"
+                    value={formData.accountNumber}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">Password</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    name="password"
+                    placeholder="Password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <button type="submit" className="btn btn-primary w-100">Login</button>
+                <button type="button" onClick={() => navigate('/register')} className="btn btn-link w-100 mt-2">Register</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

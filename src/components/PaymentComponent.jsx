@@ -42,49 +42,77 @@ const PaymentComponent = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="number"
-        name="amount"
-        placeholder="Amount"
-        value={paymentData.amount}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="currency"
-        placeholder="Currency"
-        value={paymentData.currency}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="provider"
-        placeholder="Provider"
-        value={paymentData.provider}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="accountInfo"
-        placeholder="Account Info"
-        value={paymentData.accountInfo}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="swiftCode"
-        placeholder="SWIFT Code"
-        value={paymentData.swiftCode}
-        onChange={handleChange}
-        required
-      />
-      <button type="submit">Make Payment</button>
-    </form>
+    <div className="container mt-5">
+      <h2 className="text-center mb-4">Make a Payment</h2>
+      <form onSubmit={handleSubmit} className="w-50 mx-auto">
+        <div className="mb-3">
+          <label htmlFor="amount" className="form-label">Amount</label>
+          <input
+            type="number"
+            id="amount"
+            name="amount"
+            className="form-control"
+            placeholder="Amount"
+            value={paymentData.amount}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="currency" className="form-label">Currency</label>
+          <input
+            type="text"
+            id="currency"
+            name="currency"
+            className="form-control"
+            placeholder="Currency"
+            value={paymentData.currency}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="provider" className="form-label">Provider</label>
+          <input
+            type="text"
+            id="provider"
+            name="provider"
+            className="form-control"
+            placeholder="Provider"
+            value={paymentData.provider}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="accountInfo" className="form-label">Account Info</label>
+          <input
+            type="text"
+            id="accountInfo"
+            name="accountInfo"
+            className="form-control"
+            placeholder="Account Info"
+            value={paymentData.accountInfo}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="swiftCode" className="form-label">SWIFT Code</label>
+          <input
+            type="text"
+            id="swiftCode"
+            name="swiftCode"
+            className="form-control"
+            placeholder="SWIFT Code"
+            value={paymentData.swiftCode}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <button type="submit" className="btn btn-primary w-100">Make Payment</button>
+      </form>
+    </div>
   );
 };
 

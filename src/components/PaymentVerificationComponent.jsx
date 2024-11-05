@@ -48,19 +48,23 @@ const VerifyPaymentsComponent = () => {
   };
 
   return (
-    <div>
-      <h2>Pending Payments</h2>
+    <div className="container mt-5">
+      <h2 className="text-center mb-4">Pending Payments</h2>
       {payments.length === 0 ? (
-        <p>No pending payments</p>
+        <p className="text-center">No pending payments</p>
       ) : (
-        payments.map((payment) => (
-          <div key={payment._id}>
-            <p>Amount: {payment.amount}</p>
-            <p>Currency: {payment.currency}</p>
-            <p>Provider: {payment.provider}</p>
-            <button onClick={() => handleVerify(payment._id)}>Verify Payment</button>
-          </div>
-        ))
+        <div className="list-group w-50 mx-auto">
+          {payments.map((payment) => (
+            <div key={payment._id} className="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <p className="mb-1">Amount: {payment.amount}</p>
+                <p className="mb-1">Currency: {payment.currency}</p>
+                <p className="mb-1">Provider: {payment.provider}</p>
+              </div>
+              <button className="btn btn-success" onClick={() => handleVerify(payment._id)}>Verify Payment</button>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
