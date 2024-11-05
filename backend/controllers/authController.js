@@ -1,8 +1,9 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 const Joi = require('joi');
+const zxcvbn = require('zxcvbn');
 const validator = require('validator');
+const argon2 = require('argon2');
 
 
 // Joi schema for input validation
@@ -10,8 +11,19 @@ const registerSchema = Joi.object({
   fullName: Joi.string().min(3).max(50).required(),
   idNumber: Joi.string().min(6).max(20).required(),
   accountNumber: Joi.string().min(6).max(20).required(),
-  password: Joi.string().min(8).required(),
-  role: Joi.string().valid('customer', 'employee').required() // Assuming role can only be 'customer' or 'employee'
+  password: Joi.string()
+      .min(12)  // Minimum length of 12 characters
+      .pattern(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])")) // Must include uppercase, lowercase, number, special character
+      .required()
+      .custom((value, helpers) => {
+          // Check against common passwords using zxcvbn
+          const result = zxcvbn(value);
+          if (result.score < 3) {
+              return helpers.error("password.tooWeak", { value });
+          }
+          return value;
+      }, 'Password Strength'),
+  role: Joi.string().min(8).max(8)
 });
 
 const loginSchema = Joi.object({
@@ -30,7 +42,12 @@ exports.register = async (req, res) => {
     const { fullName, idNumber, accountNumber, password, role } = req.body;
 
     // Hash the password before saving
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await argon2.hash(password, {
+        type: argon2.argon2id,  // Secure variant of Argon2
+        memoryCost: 2 ** 16,    // Amount of memory to use (64MB)
+        timeCost: 4,            // Number of iterations
+        parallelism: 2          // Number of parallel threads
+      });
     const user = new User({ fullName, idNumber, accountNumber, password: hashedPassword, role });
 
     await user.save();
@@ -59,7 +76,7 @@ exports.login = async (req, res) => {
     }
 
     // Compare the provided password with the hashed password
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await argon2.verify(user.password, password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
